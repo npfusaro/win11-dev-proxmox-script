@@ -3,7 +3,7 @@
 # --- Configuration ---
 # REPLACE THIS with your actual GitHub Raw URL base
 # Example: "https://raw.githubusercontent.com/YourUsername/Proxmox-Windows-Install/main"
-GITHUB_RAW_URL="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main"
+GITHUB_RAW_URL="https://raw.githubusercontent.com/npfusaro/win11-dev-proxmox-script/main"
 
 SCRIPT_NAME="Proxmox script.sh"
 XML_NAME="autounattend.xml"
