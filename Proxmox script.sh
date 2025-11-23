@@ -33,37 +33,6 @@ ANSWER_FILE="autounattend.xml"
 DISK_SIZE="130G"
 OS_TYPE="win11"
 
-# --- Dynamic Path Resolution ---
-# We ask Proxmox where the ISOs are actually stored for the given Storage ID
-# This avoids hardcoding paths like /var/lib/vz or /mnt/pve/...
-get_iso_path() {
-    local filename="$1"
-    # pvesm path returns the full filesystem path for a volume
-    # Syntax: pvesm path <STORAGE_ID>:iso/<FILENAME>
-    pvesm path "$ISO_STORAGE_ID:iso/$filename" 2>/dev/null
-}
-
-# Resolve the root ISO directory by asking for a dummy file
-# This is a bit of a hack, but reliable. We get the path for 'dummy', then dirname it.
-# If the storage is not active or found, this might fail, so we check later.
-DUMMY_PATH=$(pvesm path "$ISO_STORAGE_ID:iso/dummy" 2>/dev/null)
-if [ -z "$DUMMY_PATH" ]; then
-    echo "Error: Could not resolve path for storage '$ISO_STORAGE_ID'."
-    echo "Please check if the Storage ID exists and is active in Proxmox."
-    exit 1
-fi
-ISO_PATH_ROOT=$(dirname "$DUMMY_PATH")
-
-# --- Cleanup Trap ---
-# Remove generated ISO if script fails to prevent orphaned files
-cleanup() {
-    if [ -f "$ISO_PATH_ROOT/$OEM_ISO" ]; then
-        echo "Cleaning up generated ISO..."
-        rm -f "$ISO_PATH_ROOT/$OEM_ISO"
-    fi
-}
-trap cleanup ERR
-
 # --- Download Windows ISO ---
 download_windows_iso() {
     echo "================================================"
@@ -268,3 +237,4 @@ echo "3. The installation will proceed automatically (30-60 minutes)"
 echo "   - Windows setup: ~10 minutes"
 echo "   - Software installation (VS2022, VS Code, Git): ~20-30 minutes"
 echo "================================================"
+
