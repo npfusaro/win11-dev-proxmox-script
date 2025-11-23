@@ -17,13 +17,10 @@ This project automates the creation of a fully configured Windows 11 Development
 
 ## 🚀 Quick Start
 
-You can run the installer directly from your Proxmox shell using the "Community Script" method:
 
 ```bash
-bash -c "$(wget -qLO - https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install.sh)" -- -i 3000 -n "Dev-VM" -p "SecurePass123"
+bash -c "$(wget -qLO - https://raw.githubusercontent.com/npfusaro/win11-dev-proxmox-script/main/install.sh)" -- -i 3000 -n "Dev-VM" -p "SecurePass123"
 ```
-*(Replace `YOUR_USERNAME/YOUR_REPO` with your actual GitHub repository details)*
-
 ## ⚙️ Configuration
 
 ### Command Line Arguments
@@ -145,3 +142,4 @@ This project is open source and available under the MIT License.
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page or submit a pull request.
+
