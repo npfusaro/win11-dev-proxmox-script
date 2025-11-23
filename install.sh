@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# --- Configuration ---
-# REPLACE THIS with your actual GitHub Raw URL base
-# Example: "https://raw.githubusercontent.com/YourUsername/Proxmox-Windows-Install/main"
 GITHUB_RAW_URL="https://raw.githubusercontent.com/npfusaro/win11-dev-proxmox-script/main"
 
 SCRIPT_NAME="Proxmox script.sh"
@@ -14,14 +11,8 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Validate that user updated the GitHub URL
-if [[ "$GITHUB_RAW_URL" == *"YOUR_USERNAME"* ]] || [[ "$GITHUB_RAW_URL" == *"YOUR_REPO"* ]]; then
-    echo -e "${RED}Error: Please update GITHUB_RAW_URL in this script before running.${NC}"
-    echo -e "${YELLOW}Edit line 6 and replace YOUR_USERNAME/YOUR_REPO with your actual GitHub repository.${NC}"
-    exit 1
-fi
 
-echo -e "${GREEN}Starting Antigravity Windows 11 VM Installer...${NC}"
+echo -e "${GREEN}Starting Windows 11 Dev Enviorment VM Installer...${NC}"
 
 # 1. Install Dependencies
 echo -e "${YELLOW}Checking dependencies...${NC}"
