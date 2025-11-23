@@ -41,6 +41,9 @@ if [ $? -ne 0 ]; then
 fi
 
 
+# Fix line endings (convert CRLF to LF) in case file was saved on Windows
+sed -i 's/\r$//' "$SCRIPT_NAME"
+
 chmod +x "$SCRIPT_NAME" || {
     echo -e "${RED}Failed to make script executable${NC}"
     exit 1
