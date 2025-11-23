@@ -1,0 +1,21 @@
+# ISO files
+*.iso
+
+# Temporary or legacy files
+*.txt
+*.bak
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Generated files that shouldn't be committed
+win11-unattend-*.iso
