@@ -23,11 +23,7 @@ done
 
 # PROXMOX STORAGE IDs (The name of the storage in Datacenter -> Storage)
 DISK_STORAGE="local-lvm"      # Where the VM disk goes
-ISO_STORAGE_ID="nfs"          # The Proxmox Storage ID for ISOs
-
-# FILESYSTEM PATHS (For verification checks)
-# Ensure this path matches where ISO_STORAGE_ID points to
-ISO_PATH_ROOT="/mnt/pve/nfs/template/iso" 
+ISO_STORAGE_ID="local"        # The Proxmox Storage ID for ISOs (Default: local)
 
 # FILE NAMES
 VIRTIO_ISO="virtio-win-0.1.240.iso"
@@ -36,6 +32,27 @@ ANSWER_FILE="autounattend.xml"
 
 DISK_SIZE="130G"
 OS_TYPE="win11"
+
+# --- Dynamic Path Resolution ---
+# We ask Proxmox where the ISOs are actually stored for the given Storage ID
+# This avoids hardcoding paths like /var/lib/vz or /mnt/pve/...
+get_iso_path() {
+    local filename="$1"
+    # pvesm path returns the full filesystem path for a volume
+    # Syntax: pvesm path <STORAGE_ID>:iso/<FILENAME>
+    pvesm path "$ISO_STORAGE_ID:iso/$filename" 2>/dev/null
+}
+
+# Resolve the root ISO directory by asking for a dummy file
+# This is a bit of a hack, but reliable. We get the path for 'dummy', then dirname it.
+# If the storage is not active or found, this might fail, so we check later.
+DUMMY_PATH=$(pvesm path "$ISO_STORAGE_ID:iso/dummy" 2>/dev/null)
+if [ -z "$DUMMY_PATH" ]; then
+    echo "Error: Could not resolve path for storage '$ISO_STORAGE_ID'."
+    echo "Please check if the Storage ID exists and is active in Proxmox."
+    exit 1
+fi
+ISO_PATH_ROOT=$(dirname "$DUMMY_PATH")
 
 # --- Cleanup Trap ---
 # Remove generated ISO if script fails to prevent orphaned files
@@ -140,7 +157,7 @@ if ! pvesm status | grep -q "^$ISO_STORAGE_ID"; then
 fi
 
 # Check for Windows 11 ISO
-echo "Searching for Windows 11 ISO..."
+echo "Searching for Windows 11 ISO in $ISO_PATH_ROOT..."
 # Find any ISO starting with Win11
 FOUND_ISO=$(find "$ISO_PATH_ROOT" -maxdepth 1 -name "Win11*.iso" -type f | head -n 1)
 
